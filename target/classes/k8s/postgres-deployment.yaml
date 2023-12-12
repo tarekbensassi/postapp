@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postappdb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postappdb
+  template:
+    metadata:
+      labels:
+        app: postappdb
+    spec:
+      containers:
+        - name: postappdb
+          image: postgres
+          env:
+            - name: POSTGRES_USER
+              value: $POSTGRESDB_USER
+            - name: POSTGRES_PASSWORD
+              value: $POSTGRESDB_ROOT_PASSWORD
+            - name: POSTGRES_DB
+              value: $POSTGRESDB_DATABASE
+      volumes:
+        - name: db-volume
+          persistentVolumeClaim:
+            claimName: db-pvc
