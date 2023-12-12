@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: db-pv
+spec:
+  capacity:
+    storage: 1Gi  # Ajustez selon vos besoins
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/db"  # Ajustez selon vos besoins
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi  # Doit correspondre à la taille du Volume Persistant

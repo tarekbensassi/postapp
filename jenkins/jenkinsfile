@@ -1,0 +1,62 @@
+pipeline {
+    agent any
+    
+    environment {
+        PATH = "$PATH:/usr/share/maven/bin"
+        DOCKER_IMAGE = "registry.hub.docker.com/spring-boot-postapp:${env.BUILD_NUMBER}"
+       SONAR_SCANNER_HOME = tool 'SonarQubeScanner5.0.1'
+    }
+    
+    stages {
+        stage('Get aCode') {
+            steps {
+                echo 'Getting code'
+                git 'https://github.com/tarekbensassi/postapp.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building'
+                sh 'mvn clean package'
+            }
+        }
+
+    
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'SonarQubeScanner5.0.1'
+                    withSonarQubeEnv('sonarserver') {
+                     
+             //      sh "${scannerHome}/bin/sonar-scanner"
+                     sh "mvn sonar:sonar"
+                    }
+                }
+            }
+        }
+
+       
+
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                  // Build and push Docker image
+                  //  def dockerImage = docker.build("spring-boot-postapp:${env.BUILD_NUMBER}")
+                 //   echo "Docker Image Tag Name: ${dockerImage.id}"
+
+                  // sh "docker stop spring-boot-postapp || true"
+                 //  sh "docker rm spring-boot-postapp || true"
+                 // sh "docker run --name spring-boot-postapp -d -p 8081:8081 ${dockerImage.id}"
+                 
+                 // Build and push Docker images defined in docker-compose.yml
+                 
+                   // sh "docker-compose --build"
+                   // sh"docker-compose build"
+                   sh "docker-compose up -d"
+                }
+            }
+        }
+    }
+}
