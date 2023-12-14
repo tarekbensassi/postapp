@@ -26,35 +26,35 @@ import com.postapp.repository.PostRepository;
 @RequestMapping("/api")
 public class PostController {
 
-	@Autowired
-	PostRepository PostRepository;
+	
+	   private final PostRepository postRepository;
 
-	@GetMapping("/posts")
-	public ResponseEntity<List<Post>> getAllPosts(@RequestParam(required = false) String title) {
-		try {
-			List<Post> Posts = new ArrayList<Post>();
+	    public PostController(PostRepository postRepository) {
+	        this.postRepository = postRepository;
+	    }
+	    
+	    @GetMapping("/posts")
+	    public ResponseEntity<?> getAllPosts() {
+	        try {
+	            Iterable<Post> posts = postRepository.findAll();
 
-			if (title == null)
-				PostRepository.findAll().forEach(Posts::add);
-			else
-				PostRepository.findByTitleContaining(title).forEach(Posts::add);
+	            if (((List<Post>) posts).isEmpty()) {
+	                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	            }
 
-			if (Posts.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
-
-			return new ResponseEntity<>(Posts, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+	            return new ResponseEntity<>(posts, HttpStatus.OK);
+	        } catch (Exception e) {
+	            return new ResponseEntity<>("An error occurred while fetching the posts.", HttpStatus.INTERNAL_SERVER_ERROR);
+	        }
+	    }
+	
 
 	@GetMapping("/posts/{id}")
 	public ResponseEntity<Post> getPostById(@PathVariable("id") long id) {
-		Optional<Post> PostData = PostRepository.findById(id);
+		Post PostData = postRepository.findById(id).get();
 
-		if (PostData.isPresent()) {
-			return new ResponseEntity<>(PostData.get(), HttpStatus.OK);
+		if (PostData!=null) {
+			return new ResponseEntity<>(PostData, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -63,7 +63,7 @@ public class PostController {
 	@PostMapping("/posts")
 	public ResponseEntity<Post> createPost(@RequestBody Post Post) {
 		try {
-			Post _Post = PostRepository
+			Post _Post = postRepository
 					.save(new Post(Post.getTitle(), Post.getDescription(), false));
 			return new ResponseEntity<>(_Post, HttpStatus.CREATED);
 		} catch (Exception e) {
@@ -73,14 +73,14 @@ public class PostController {
 
 	@PutMapping("/posts/{id}")
 	public ResponseEntity<Post> updatePost(@PathVariable("id") long id, @RequestBody Post Post) {
-		Optional<Post> PostData = PostRepository.findById(id);
+		Optional<Post> PostData = postRepository.findById(id);
 
 		if (PostData.isPresent()) {
 			Post _Post = PostData.get();
 			_Post.setTitle(Post.getTitle());
 			_Post.setDescription(Post.getDescription());
 			_Post.setPublished(Post.isPublished());
-			return new ResponseEntity<>(PostRepository.save(_Post), HttpStatus.OK);
+			return new ResponseEntity<>(postRepository.save(_Post), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -89,7 +89,7 @@ public class PostController {
 	@DeleteMapping("/posts/{id}")
 	public ResponseEntity<HttpStatus> deletePost(@PathVariable("id") long id) {
 		try {
-			PostRepository.deleteById(id);
+			postRepository.deleteById(id);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -99,7 +99,7 @@ public class PostController {
 	@DeleteMapping("/posts")
 	public ResponseEntity<HttpStatus> deleteAllPosts() {
 		try {
-			PostRepository.deleteAll();
+			postRepository.deleteAll();
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -110,7 +110,7 @@ public class PostController {
 	@GetMapping("/posts/published")
 	public ResponseEntity<List<Post>> findByPublished() {
 		try {
-			List<Post> Posts = PostRepository.findByPublished(true);
+			List<Post> Posts = postRepository.findByPublished(true);
 
 			if (Posts.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);

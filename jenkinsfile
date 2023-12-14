@@ -1,5 +1,6 @@
 pipeline {
     agent any
+    agent any
     
     environment {
         PATH = "$PATH:/usr/share/maven/bin"
@@ -7,8 +8,9 @@ pipeline {
        SONAR_SCANNER_HOME = tool 'SonarQubeScanner5.0.1'
     }
     
+
     stages {
-        stage('Get aCode') {
+          stage('Get aCode') {
             steps {
                 echo 'Getting code'
                 git 'https://github.com/tarekbensassi/postapp.git'
@@ -34,27 +36,37 @@ pipeline {
                     }
                 }
             }
-        }
-
-       
-
-
-        stage('Build Docker Image') {
+        stage('Deploy PostgreSQL') {
             steps {
                 script {
-                  // Build and push Docker image
-                  //  def dockerImage = docker.build("spring-boot-postapp:${env.BUILD_NUMBER}")
-                 //   echo "Docker Image Tag Name: ${dockerImage.id}"
+                    sh 'kubectl apply -f postgres-deployment.yaml'
+                    sh 'kubectl apply -f postgres-service.yaml'
+                }
+            }
+        }
 
-                  // sh "docker stop spring-boot-postapp || true"
-                 //  sh "docker rm spring-boot-postapp || true"
-                 // sh "docker run --name spring-boot-postapp -d -p 8081:8081 ${dockerImage.id}"
-                 
-                 // Build and push Docker images defined in docker-compose.yml
-                 
-                   // sh "docker-compose --build"
-                   // sh"docker-compose build"
-                   sh "docker-compose up -d"
+        stage('Deploy Spring App') {
+            steps {
+                script {
+                    sh 'kubectl apply -f spring-app-deployment.yaml'
+                    sh 'kubectl apply -f spring-app-service.yaml'
+                }
+            }
+        }
+
+        stage('Deploy Grafana') {
+            steps {
+                script {
+                    sh 'kubectl apply -f grafana-deployment.yaml'
+                    sh 'kubectl apply -f grafana-service.yaml'
+                }
+            }
+        }
+
+        stage('Deploy PostgreSQL PV and PVC') {
+            steps {
+                script {
+                    sh 'kubectl apply -f postgres-pv-pvc.yaml'
                 }
             }
         }
