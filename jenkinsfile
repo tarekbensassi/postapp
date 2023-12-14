@@ -1,16 +1,14 @@
 pipeline {
-   
     agent any
-    
+
     environment {
         PATH = "$PATH:/usr/share/maven/bin"
         DOCKER_IMAGE = "registry.hub.docker.com/spring-boot-postapp:${env.BUILD_NUMBER}"
-       SONAR_SCANNER_HOME = tool 'SonarQubeScanner5.0.1'
+        SONAR_SCANNER_HOME = tool 'SonarQubeScanner5.0.1'
     }
-    
 
     stages {
-          stage('Get aCode') {
+        stage('Get Code') {
             steps {
                 echo 'Getting code'
                 git 'https://github.com/tarekbensassi/postapp.git'
@@ -24,18 +22,17 @@ pipeline {
             }
         }
 
-    
         stage('SonarQube Analysis') {
             steps {
                 script {
                     def scannerHome = tool 'SonarQubeScanner5.0.1'
                     withSonarQubeEnv('sonarserver') {
-                     
-             //      sh "${scannerHome}/bin/sonar-scanner"
-                     sh "mvn sonar:sonar"
+                        sh "${scannerHome}/bin/sonar-scanner"
                     }
                 }
             }
+        }
+
         stage('Deploy PostgreSQL') {
             steps {
                 script {
@@ -71,5 +68,4 @@ pipeline {
             }
         }
     }
-}
 }
