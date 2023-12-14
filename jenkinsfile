@@ -36,8 +36,8 @@ pipeline {
         stage('Deploy PostgreSQL') {
             steps {
                 script {
-                    sh 'kubectl apply -f postgres-deployment.yaml'
-                    sh 'kubectl apply -f postgres-service.yaml'
+                    sh 'kubectl apply -f k8s/postgres-deployment.yaml'
+                    sh 'kubectl apply -f k8s/postgres-service.yaml'
                 }
             }
         }
@@ -45,8 +45,8 @@ pipeline {
         stage('Deploy Spring App') {
             steps {
                 script {
-                    sh 'kubectl apply -f spring-app-deployment.yaml'
-                    sh 'kubectl apply -f spring-app-service.yaml'
+                    sh 'kubectl apply -f k8s/spring-app-deployment.yaml'
+                    sh 'kubectl apply -f k8s/spring-app-service.yaml'
                 }
             }
         }
@@ -54,8 +54,8 @@ pipeline {
         stage('Deploy Grafana') {
             steps {
                 script {
-                    sh 'kubectl apply -f grafana-deployment.yaml'
-                    sh 'kubectl apply -f grafana-service.yaml'
+                    sh 'kubectl apply -f k8s/grafana-deployment.yaml'
+                    sh 'kubectl apply -f k8s/grafana-service.yaml'
                 }
             }
         }
@@ -63,7 +63,7 @@ pipeline {
         stage('Deploy PostgreSQL PV and PVC') {
             steps {
                 script {
-                    sh 'kubectl apply -f postgres-pv-pvc.yaml'
+                    sh 'kubectl apply -f k8s/postgres-pv-pvc.yaml'
                 }
             }
         }
