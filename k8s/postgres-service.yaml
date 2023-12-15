@@ -7,5 +7,5 @@ spec:
     app: postappdb
   ports:
     - protocol: TCP
-      port: $POSTGRESDB_LOCAL_PORT
-      targetPort: $POSTGRESDB_DOCKER_PORT
+      port: 5432
+      targetPort: 5432

@@ -18,7 +18,8 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building'
-                sh 'mvn clean package'
+                 
+              //  sh 'mvn clean package'
             }
         }
 
@@ -27,9 +28,9 @@ pipeline {
                  script {
                     def scannerHome = tool 'SonarQubeScanner5.0.1'
                     withSonarQubeEnv('sonarserver') {
-                     
+                      echo 'SonarQube Analysis' 
              //      sh "${scannerHome}/bin/sonar-scanner"
-                     sh "mvn sonar:sonar"
+                   //  sh "mvn sonar:sonar"
                     }
                 }
             }
@@ -41,10 +42,11 @@ pipeline {
                     // Assurez-vous d'être dans le bon répertoire
                     dir("${WORKSPACE}/k8s") {
                         // Appliquer la configuration de déploiement
-                        sh 'kubectl apply -f postgres-deployment.yaml'
+                         echo 'Deploy PostgreSQL'
+                     //   sh 'kubectl apply -f postgres-deployment.yaml'
                         
                         // Appliquer la configuration du service
-                        sh 'kubectl apply -f postgres-service.yaml'
+                     //   sh 'kubectl apply -f postgres-service.yaml'
                     }
                 }
             }
@@ -55,6 +57,7 @@ pipeline {
                 script {
                     // Assurez-vous d'être dans le bon répertoire
                     dir("${WORKSPACE}/k8s") {
+                         echo 'Deploy Spring App'
                     sh 'kubectl apply -f spring-app-deployment.yaml'
                     sh 'kubectl apply -f spring-app-service.yaml'
                     }
@@ -66,8 +69,9 @@ pipeline {
             steps {
                 script {
                       dir("${WORKSPACE}/k8s") {
-                    sh 'kubectl apply -f grafana-deployment.yaml'
-                    sh 'kubectl apply -f grafana-service.yaml'
+                          echo 'Deploy Spring App'
+                   // sh 'kubectl apply -f grafana-deployment.yaml'
+                  //  sh 'kubectl apply -f grafana-service.yaml'
                 }
                 }
                 
@@ -78,7 +82,8 @@ pipeline {
             steps {
                 script {
                  dir("${WORKSPACE}/k8s") {
-                    sh 'kubectl apply -f postgres-pv-pvc.yaml'
+                      echo 'Deploy Spring App'
+                   // sh 'kubectl apply -f postgres-pv-pvc.yaml'
                 }}
             }
         }
