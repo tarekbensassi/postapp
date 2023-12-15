@@ -35,11 +35,17 @@ pipeline {
             }
         }
 
-        stage('Deploy PostgreSQL') {
+      stage('Deploy PostgreSQL') {
             steps {
                 script {
-                    sh 'kubectl apply -f k8s/postgres-deployment.yaml'
-                    sh 'kubectl apply -f k8s/postgres-service.yaml'
+                    // Assurez-vous d'être dans le bon répertoire
+                    dir("${WORKSPACE}/k8s") {
+                        // Appliquer la configuration de déploiement
+                        sh 'kubectl apply -f postgres-deployment.yaml'
+                        
+                        // Appliquer la configuration du service
+                        sh 'kubectl apply -f postgres-service.yaml'
+                    }
                 }
             }
         }
@@ -47,26 +53,33 @@ pipeline {
         stage('Deploy Spring App') {
             steps {
                 script {
-                    sh 'kubectl apply -f k8s/spring-app-deployment.yaml'
-                    sh 'kubectl apply -f k8s/spring-app-service.yaml'
+                    // Assurez-vous d'être dans le bon répertoire
+                    dir("${WORKSPACE}/k8s") {
+                    sh 'kubectl apply -f spring-app-deployment.yaml'
+                    sh 'kubectl apply -f spring-app-service.yaml'
+                    }
                 }
             }
         }
-
+        
         stage('Deploy Grafana') {
             steps {
                 script {
-                    sh 'kubectl apply -f k8s/grafana-deployment.yaml'
-                    sh 'kubectl apply -f k8s/grafana-service.yaml'
+                      dir("${WORKSPACE}/k8s") {
+                    sh 'kubectl apply -f grafana-deployment.yaml'
+                    sh 'kubectl apply -f grafana-service.yaml'
                 }
+                }
+                
             }
         }
 
         stage('Deploy PostgreSQL PV and PVC') {
             steps {
                 script {
-                    sh 'kubectl apply -f k8s/postgres-pv-pvc.yaml'
-                }
+                 dir("${WORKSPACE}/k8s") {
+                    sh 'kubectl apply -f postgres-pv-pvc.yaml'
+                }}
             }
         }
     }
