@@ -7,5 +7,5 @@ spec:
     app: app
   ports:
     - protocol: TCP
-      port: $SPRING_LOCAL_PORT
-      targetPort: $SPRING_DOCKER_PORT
+      port: 8081
+      targetPort: 8081

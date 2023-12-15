@@ -58,8 +58,8 @@ pipeline {
                     // Assurez-vous d'être dans le bon répertoire
                     dir("${WORKSPACE}/k8s") {
                          echo 'Deploy Spring App'
-                    sh 'kubectl apply -f spring-app-deployment.yaml'
-                    sh 'kubectl apply -f spring-app-service.yaml'
+                 //   sh 'kubectl apply -f spring-app-deployment.yaml'
+                  //  sh 'kubectl apply -f spring-app-service.yaml'
                     }
                 }
             }
