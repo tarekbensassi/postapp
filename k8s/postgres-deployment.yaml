@@ -26,3 +26,17 @@ spec:
         - name: db-volume
           persistentVolumeClaim:
             claimName: db-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postappdb-service
+spec:
+  selector:
+    app: postappdb
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+  type: NodePort
+

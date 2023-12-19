@@ -22,3 +22,16 @@ spec:
               value: $POSTGRESDB_USER
             - name: SPRING_DATASOURCE_PASSWORD
               value: $POSTGRESDB_ROOT_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+spec:
+  selector:
+    app: app
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+  type: NodePort
