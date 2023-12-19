@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: postapp
-          image: docker.io/library/postapp
+          image: docker.io/library/postapp:latest
           imagePullPolicy: Never
           env:
             - name: SPRING_DATASOURCE_URL
