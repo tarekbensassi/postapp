@@ -17,11 +17,11 @@ spec:
           image: postapp:latest
           env:
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://postappdb-service:$POSTGRESDB_DOCKER_PORT/$POSTGRESDB_DATABASE
+              value: jdbc:postgresql://postappdb-service:5432/postapp
             - name: SPRING_DATASOURCE_USERNAME
-              value: $POSTGRESDB_USER
+              value: postgres
             - name: SPRING_DATASOURCE_PASSWORD
-              value: $POSTGRESDB_ROOT_PASSWORD
+              value: postgres
 ---
 apiVersion: v1
 kind: Service

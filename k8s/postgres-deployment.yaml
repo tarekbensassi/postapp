@@ -17,11 +17,11 @@ spec:
           image: postgres
           env:
             - name: POSTGRES_USER
-              value: $POSTGRESDB_USER
+              value: postgres
             - name: POSTGRES_PASSWORD
-              value: $POSTGRESDB_ROOT_PASSWORD
+              value: postgres
             - name: POSTGRES_DB
-              value: $POSTGRESDB_DATABASE
+              value: postapp
       volumes:
         - name: db-volume
           persistentVolumeClaim:
@@ -39,4 +39,3 @@ spec:
       port: 5432
       targetPort: 5432
   type: NodePort
-

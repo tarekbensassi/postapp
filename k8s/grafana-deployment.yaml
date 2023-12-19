@@ -23,7 +23,7 @@ spec:
       volumes:
         - name: grafana-volume
           hostPath:
-            path: ./grafana
+            path: /path/to/your/local/directory
 ---
 apiVersion: v1
 kind: Service
