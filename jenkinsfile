@@ -21,6 +21,15 @@ pipeline {
                  
                 sh 'mvn clean package'
                 sh ' docker build -t postapp:latest .'
+             /*  def dockerImage = docker.build("postapp:${env.BUILD_NUMBER}")
+               echo "Docker Image Tag Name: ${dockerImage.id}"
+
+                sh "docker stop postapp || true"
+                  sh "docker rm postapp || true"
+                   sh "docker push your-docker-registry/your-spring-boot-app:version"
+*/
+                 // sh "docker run --name spring-boot-postapp -d -p 8081:8081 ${dockerImage.id}"
+                 
 
             }
         }
