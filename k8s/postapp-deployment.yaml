@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-deployment
+  name: postapp-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app
+      app: postapp
   template:
     metadata:
       labels:
-        app: app
+        app: postapp
     spec:
       containers:
-        - name: app
+        - name: postapp
           image: postapp:latest
           env:
             - name: SPRING_DATASOURCE_URL
@@ -28,7 +28,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: app-service
+  name: postapp-service
 spec:
   selector:
     app: app
