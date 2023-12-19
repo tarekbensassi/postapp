@@ -19,7 +19,9 @@ pipeline {
             steps {
                 echo 'Building'
                  
-              //  sh 'mvn clean package'
+                sh 'mvn clean package'
+                sh ' docker build -t postapp:latest .'
+
             }
         }
 
