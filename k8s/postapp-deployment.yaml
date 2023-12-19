@@ -16,7 +16,6 @@ spec:
         - name: postapp
           image: trk90/postapp
           imagePullPolicy: Never
-        restartPolicy: Never
           env:
             - name: SPRING_DATASOURCE_URL
               value: jdbc:postgresql://postappdb-service:5432/postapp
@@ -24,8 +23,10 @@ spec:
               value: postgres
             - name: SPRING_DATASOURCE_PASSWORD
               value: postgres
+      restartPolicy: Always
       imagePullSecrets:
         - name: regcred
+
 ---
 apiVersion: v1
 kind: Service
@@ -33,7 +34,7 @@ metadata:
   name: postapp-service
 spec:
   selector:
-    app: app
+    app: postapp
   ports:
     - protocol: TCP
       port: 8081
