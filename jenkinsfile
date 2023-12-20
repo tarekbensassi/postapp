@@ -29,23 +29,23 @@ pipeline {
                     echo "Docker Image Tag Name: ${dockerImage.id}"
 
                     withDockerRegistry([credentialsId: "docker-cred", url: "https://index.docker.io/v1/"]) {
-                        bat "docker push trk90/postapp:latest"  // Corrected image tag
+                        sh "docker push trk90/postapp:latest"  // Corrected image tag
                     }
                 }
             }
         }
 
-        stage('SonarQube Analysis') {
+            stage('SonarQube Analysis') {
             steps {
                 script {
                     def scannerHome = tool 'SonarQubeScanner5.0.1'
                     withSonarQubeEnv('sonarserver') {
-                        echo 'SonarQube Analysis' 
-                        sh "${scannerHome}/bin/sonar-scanner"
+                      echo 'Deploy SonarQube'
+             //      sh "${scannerHome}/bin/sonar-scanner"
+                    // sh "mvn sonar:sonar"
                     }
                 }
             }
-        }
 
         stage('Deploy PostgreSQL') {
             steps {
@@ -53,8 +53,8 @@ pipeline {
                     // Ensure you are in the correct directory
                     dir("${WORKSPACE}/k8s") {
                         echo 'Deploy PostgreSQL'
-                        sh 'kubectl apply -f postgres-deployment.yaml'
-                        sh 'kubectl apply -f postgres-service.yaml'
+                        sh 'microk8s kubectl apply -f postgres-deployment.yaml'
+                      
                     }
                 }
             }
@@ -66,8 +66,8 @@ pipeline {
                     // Ensure you are in the correct directory
                     dir("${WORKSPACE}/k8s") {
                         echo 'Deploy Spring App'
-                        sh 'kubectl apply -f spring-app-deployment.yaml'
-                        sh 'kubectl apply -f spring-app-service.yaml'
+                        sh 'microk8s kubectl apply -f postapp-deployment.yaml'
+                      
                     }
                 }
             }
@@ -79,8 +79,8 @@ pipeline {
                     // Ensure you are in the correct directory
                     dir("${WORKSPACE}/k8s") {
                         echo 'Deploy Grafana'
-                        sh 'kubectl apply -f grafana-deployment.yaml'
-                        sh 'kubectl apply -f grafana-service.yaml'
+                        sh 'microk8s kubectl apply -f grafana-deployment.yaml'
+                     
                     }
                 }
             }
@@ -92,7 +92,7 @@ pipeline {
                     // Ensure you are in the correct directory
                     dir("${WORKSPACE}/k8s") {
                         echo 'Deploy PostgreSQL PV and PVC'
-                        sh 'kubectl apply -f postgres-pv-pvc.yaml'
+                        sh 'microk8s kubectl apply -f postgres-pv-pvc.yaml'
                     }
                 }
             }
