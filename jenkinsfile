@@ -19,7 +19,7 @@ pipeline {
             steps {
                 echo 'Building'
                  
-                sh 'mvn clean package'
+                sh ' mvn clean package'
                 sh ' docker build -t postapp:lastet .'
                 sh 'docker tag postapp:lastet localhost:5000/postapp:lastet'
                 sh' docker push 127.0.0.1:5000/postapp:docker tag postapp:latest localhost:5000/postapp:lastet'
