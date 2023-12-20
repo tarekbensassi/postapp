@@ -19,9 +19,9 @@ pipeline {
             steps {
                 echo 'Building'
                  
-                sh 'mvn clean package'
-                sh ' docker build -t postapp:lastet .'
-                sh 'docker tag postapp:latest trk90/postapp:lastet:latest'
+              //  sh 'mvn clean package'
+             //   sh ' docker build -t postapp:lastet .'
+                sh 'docker tag postapp:latest localhost:5000/postapp:lastet:latest'
                 sh' docker push trk90/postapp:latest'
              /*  def dockerImage = docker.build("postapp:${env.BUILD_NUMBER}")
                echo "Docker Image Tag Name: ${dockerImage.id}"
