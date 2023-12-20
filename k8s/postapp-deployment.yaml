@@ -15,7 +15,7 @@ spec:
       containers:
         - name: postapp
           image: localhost:5000/postapp:lastet
-          imagePullPolicy: always
+          imagePullPolicy: Never
           env:
             - name: SPRING_DATASOURCE_URL
               value: jdbc:postgresql://postappdb-service:5432/postapp
