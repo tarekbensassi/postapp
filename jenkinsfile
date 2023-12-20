@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         PATH = "$PATH:/usr/share/maven/bin"
-        DOCKER_IMAGE = "registry.hub.docker.com/spring-boot-postapp:${env.BUILD_NUMBER}"
+        DOCKER_IMAGE = "registry.hub.docker.com/postapp:${env.BUILD_NUMBER}"
         SONAR_SCANNER_HOME = tool 'SonarQubeScanner5.0.1'
     }
 
@@ -12,54 +12,49 @@ pipeline {
             steps {
                 echo 'Getting code'
                 git 'https://github.com/tarekbensassi/postapp.git'
-
             }
         }
 
         stage('Build') {
             steps {
-                echo '   Building'
-                 
-                sh ' mvn clean package'
+                echo 'Building'
+                sh 'mvn clean package'
             }
         }
+
         stage('Push image') {
-             steps {
-            def dockerImage = docker.build("postapp:latest")
-            echo "Docker Image Tag Name: ${dockerImage.id}"
-
-            withDockerRegistry([credentialsId: "docker-cred", url: "https://index.docker.io/v1/"]) {
-                bat "docker push trk90/postapp:latest"  // Corrected image tag
-            }
-            }
-        }
-
-
-
-        stage('SonarQube Analysis') {
             steps {
-                 script {
-                    def scannerHome = tool 'SonarQubeScanner5.0.1'
-                    withSonarQubeEnv('sonarserver') {
-                      echo 'SonarQube Analysis' 
-             //      sh "${scannerHome}/bin/sonar-scanner"
-                   //  sh "mvn sonar:sonar"
+                script {
+                    def dockerImage = docker.build("postapp:latest")
+                    echo "Docker Image Tag Name: ${dockerImage.id}"
+
+                    withDockerRegistry([credentialsId: "docker-cred", url: "https://index.docker.io/v1/"]) {
+                        bat "docker push trk90/postapp:latest"  // Corrected image tag
                     }
                 }
             }
         }
 
-      stage('Deploy PostgreSQL') {
+        stage('SonarQube Analysis') {
             steps {
                 script {
-                    // Assurez-vous d'être dans le bon répertoire
+                    def scannerHome = tool 'SonarQubeScanner5.0.1'
+                    withSonarQubeEnv('sonarserver') {
+                        echo 'SonarQube Analysis' 
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                }
+            }
+        }
+
+        stage('Deploy PostgreSQL') {
+            steps {
+                script {
+                    // Ensure you are in the correct directory
                     dir("${WORKSPACE}/k8s") {
-                        // Appliquer la configuration de déploiement
-                         echo 'Deploy PostgreSQL'
-                     //   sh 'kubectl apply -f postgres-deployment.yaml'
-                        
-                        // Appliquer la configuration du service
-                     //   sh 'kubectl apply -f postgres-service.yaml'
+                        echo 'Deploy PostgreSQL'
+                        sh 'kubectl apply -f postgres-deployment.yaml'
+                        sh 'kubectl apply -f postgres-service.yaml'
                     }
                 }
             }
@@ -68,36 +63,38 @@ pipeline {
         stage('Deploy Spring App') {
             steps {
                 script {
-                    // Assurez-vous d'être dans le bon répertoire
+                    // Ensure you are in the correct directory
                     dir("${WORKSPACE}/k8s") {
-                         echo 'Deploy Spring App'
-                 //   sh 'kubectl apply -f spring-app-deployment.yaml'
-                  //  sh 'kubectl apply -f spring-app-service.yaml'
+                        echo 'Deploy Spring App'
+                        sh 'kubectl apply -f spring-app-deployment.yaml'
+                        sh 'kubectl apply -f spring-app-service.yaml'
                     }
                 }
             }
         }
-        
+
         stage('Deploy Grafana') {
             steps {
                 script {
-                      dir("${WORKSPACE}/k8s") {
-                          echo 'Deploy Spring App'
-                   // sh 'kubectl apply -f grafana-deployment.yaml'
-                  //  sh 'kubectl apply -f grafana-service.yaml'
+                    // Ensure you are in the correct directory
+                    dir("${WORKSPACE}/k8s") {
+                        echo 'Deploy Grafana'
+                        sh 'kubectl apply -f grafana-deployment.yaml'
+                        sh 'kubectl apply -f grafana-service.yaml'
+                    }
                 }
-                }
-                
             }
         }
 
         stage('Deploy PostgreSQL PV and PVC') {
             steps {
                 script {
-                 dir("${WORKSPACE}/k8s") {
-                      echo 'Deploy Spring App'
-                   // sh 'kubectl apply -f postgres-pv-pvc.yaml'
-                }}
+                    // Ensure you are in the correct directory
+                    dir("${WORKSPACE}/k8s") {
+                        echo 'Deploy PostgreSQL PV and PVC'
+                        sh 'kubectl apply -f postgres-pv-pvc.yaml'
+                    }
+                }
             }
         }
     }
