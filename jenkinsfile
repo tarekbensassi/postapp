@@ -18,7 +18,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Building'
+                echo '   Building'
                  
                 sh ' mvn clean package'
                 sh ' docker build -t postapp:lastet .'
