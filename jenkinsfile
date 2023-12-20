@@ -46,7 +46,7 @@ pipeline {
                     }
                 }
             }
-
+            }
         stage('Deploy PostgreSQL') {
             steps {
                 script {
