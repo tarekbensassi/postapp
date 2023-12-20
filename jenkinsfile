@@ -26,11 +26,12 @@ pipeline {
         stage('Push image') {
             def dockerImage = docker.build("postapp:latest")
             echo "Docker Image Tag Name: ${dockerImage.id}"
-            
+
             withDockerRegistry([credentialsId: "docker-cred", url: "https://index.docker.io/v1/"]) {
-                bat "docker push trk90/postapp:latest"
+                bat "docker push trk90/postapp:latest"  // Corrected image tag
             }
         }
+
 
 
         stage('SonarQube Analysis') {
