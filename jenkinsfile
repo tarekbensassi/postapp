@@ -12,6 +12,7 @@ pipeline {
             steps {
                 echo 'Getting code'
                 git 'https://github.com/tarekbensassi/postapp.git'
+
             }
         }
 
