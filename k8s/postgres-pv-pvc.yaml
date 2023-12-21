@@ -2,6 +2,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: db-pv
+  namespace: kubernetes-dashboard
 spec:
   capacity:
     storage: 1Gi  # Ajustez selon vos besoins
@@ -15,6 +16,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: db-pvc
+  namespace: kubernetes-dashboard
 spec:
   accessModes:
     - ReadWriteOnce
