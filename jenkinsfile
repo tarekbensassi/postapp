@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         PATH = "$PATH:/usr/share/maven/bin"
-        DOCKER_IMAGE = "postapp:${env.BUILD_NUMBER}"
+        DOCKER_IMAGE = "trk90/postapp:${env.BUILD_NUMBER}"
         SONAR_SCANNER_HOME = tool 'SonarQubeScanner5.0.1'
     }
 
