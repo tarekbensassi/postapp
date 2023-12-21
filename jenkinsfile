@@ -13,7 +13,7 @@ pipeline {
         stage('Get Code') {
             steps {
                 echo 'Getting code'
-              //  git 'https://github.com/tarekbensassi/postapp.git'
+                git 'https://github.com/tarekbensassi/postapp.git'
             }
         }
 
