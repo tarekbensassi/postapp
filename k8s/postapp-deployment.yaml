@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: postapp
-          image: trk90/postapp:lastet
+          image: index.docker.io/trk90/postapp:latest  
           env:
             - name: SPRING_DATASOURCE_URL
               value: jdbc:postgresql://postappdb-service:5432/postapp
@@ -33,6 +33,6 @@ spec:
     app: postapp
   ports:
     - protocol: TCP
-      port: 8081
+      port: 8081  # Expose on port 8081
       targetPort: 8081
   type: NodePort
