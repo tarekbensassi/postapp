@@ -25,6 +25,10 @@ spec:
               value: postgres
           ports:
             - containerPort: 8081
+        - command:
+           - “tail”
+           - “-f”
+           - “/dev/null”
       restartPolicy: Always
 ---
 apiVersion: v1
