@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: postapp
-          image: index.docker.io/trk90/postapp:latest  
+          image: trk90/postapp:latest  
           env:
             - name: SPRING_DATASOURCE_URL
               value: jdbc:postgresql://postappdb-service:5432/postapp
