@@ -57,7 +57,7 @@ pipeline {
                     // Ensure you are in the correct directory
                     dir("${WORKSPACE}/k8s") {
                         echo 'Deploy PostgreSQL'
-                        sh 'microk8s kubectl apply -f postgres-deployment.yaml'
+                        sh 'microk8s kubectl apply -f postappdb-deployment.yaml'
                       
                     }
                 }
