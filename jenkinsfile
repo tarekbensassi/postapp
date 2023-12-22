@@ -89,6 +89,17 @@ pipeline {
                 }
             }
         }
+        stage('Deploy prometheus') {
+            steps {
+                script {
+                    // Ensure you are in the correct directory
+                    dir("${WORKSPACE}/k8s") {
+                        echo 'Deploy prometheus'
+                        sh 'microk8s kubectl apply -f prometheus-deployment.yaml'
+                    }
+                }
+            }
+        }
 
         stage('Deploy PostgreSQL PV and PVC') {
             steps {
