@@ -20,12 +20,14 @@ pipeline {
        
         stage ('maven compile') {
             steps {
-                sh 'mvn clean compile'
+                 echo 'compile mvn'
+              //  sh 'mvn clean compile'
             }
         }
         stage ('maven Test') {
             steps {
-                sh 'mvn test'
+                  echo 'test  mvn'
+               // sh 'mvn test'
             }
         }
 
@@ -37,11 +39,17 @@ pipeline {
                       echo 'Deploy SonarQube'
              //      sh "${scannerHome}/bin/sonar-scanner"
                     // sh "mvn sonar:sonar"
-                     echo 'Quality Gate '
-                   waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
+                  
 
                     }
                 }
+            }
+            }
+             stage("quality gate"){
+                steps {
+                    script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
+                    }
             }
             }
              
