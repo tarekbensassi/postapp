@@ -29,20 +29,31 @@ pipeline {
             }
         }
 
-            stage('SonarQube Analysis') {
-            steps {
-                script {
-                    def scannerHome = tool 'SonarQubeScanner5.0.1'
-                    withSonarQubeEnv('sonarserver') {
-                      echo 'Deploy SonarQube'
-             //      sh "${scannerHome}/bin/sonar-scanner"
-                    // sh "mvn sonar:sonar"
-                     echo 'Quality Gate '
-                 waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
+             stages {
+                stage('SonarQube Analysis') {
+                    steps {
+                        script {
+                            // Use the 'withSonarQubeEnv' wrapper to set up the SonarQube environment
+                            withSonarQubeEnv('sonarserver') {
+                                echo 'Deploy SonarQube'
 
+                                // Specify the SonarQube Scanner tool
+                                def scannerHome = tool 'SonarQubeScanner5.0.1'
+
+                                // Run the SonarQube analysis
+                                sh "${scannerHome}/bin/sonar-scanner"
+
+                                // Uncomment the following line if you are using Maven for SonarQube analysis
+                                // sh "mvn sonar:sonar"
+
+                                echo 'Quality Gate'
+
+                                // Wait for the SonarQube Quality Gate
+                                waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
+                            }
+                        }
                     }
                 }
-            }
             }
              
         stage('Build') {
