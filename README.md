@@ -53,7 +53,7 @@ Refer to the comments in the Jenkinsfile and the individual configuration files 
 
 Feel free to adjust the pipeline according to your specific project requirements and environment.
 
-## Screenshoot s
+## Screenshoot
 
 ![k8s CRUD Test](https://github.com/tarekbensassi/postapp/raw/master/screen/k8s-crudtest.png)
 ![k8s Jenkinscreen.png](https://github.com/tarekbensassi/postapp/raw/master/screen/k8s-jenkinscreen.png)
