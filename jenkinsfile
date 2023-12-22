@@ -37,17 +37,14 @@ pipeline {
                       echo 'Deploy SonarQube'
              //      sh "${scannerHome}/bin/sonar-scanner"
                     // sh "mvn sonar:sonar"
+                     echo 'Quality Gate '
+                 waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
+
                     }
                 }
             }
             }
-             stage("quality gate"){
-            steps {
-                script {
-                  waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
-                }
-           }
-        }
+             
         stage('Build') {
             steps {
                 echo 'Building'
