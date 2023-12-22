@@ -38,7 +38,7 @@ pipeline {
                     withSonarQubeEnv('sonarserver') {
                       echo 'Deploy SonarQube'
              //      sh "${scannerHome}/bin/sonar-scanner"
-                    // sh "mvn sonar:sonar"
+                    sh "mvn sonar:sonar"
                   
 
                     }
@@ -47,9 +47,13 @@ pipeline {
             }
              stage("quality gate"){
                 steps {
+
                     script {
-                        
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
+                         // Use 'withSonarQubeEnv' again to ensure the SonarQube environment is set up
+                    withSonarQubeEnv('sonarserver') {
+                        // Wait for the SonarQube Quality Gate
+                        waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
+                    }
                     }
             }
             }
