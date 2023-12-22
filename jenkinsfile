@@ -52,7 +52,7 @@ pipeline {
                          // Use 'withSonarQubeEnv' again to ensure the SonarQube environment is set up
                     withSonarQubeEnv('sonarserver') {
                         // Wait for the SonarQube Quality Gate
-                        waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
+                        waitForQualityGate abortPipeline: true, credentialsId: 'sonar-token'
                     }
                     }
             }
