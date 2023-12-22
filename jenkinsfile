@@ -17,27 +17,17 @@ pipeline {
             }
         }
 
-        stage('Build') {
+       
+        vstage ('maven compile') {
             steps {
-                echo 'Building'
-              //  sh 'mvn clean package'
+                sh 'mvn clean compile'
             }
         }
-
-        stage('Push image') {
+        stage ('maven Test') {
             steps {
-               script {
-            docker.withRegistry('https://index.docker.io/v1/', 'docker-cred') {
-                   echo 'Push image'
-                // Build and tag Docker image
-               // docker.build(DOCKER_IMAGE)
-                // Push the Docker image
-             //   docker.image(DOCKER_IMAGE).push()
+                sh 'mvn test'
             }
         }
-            }
-        }
-
 
             stage('SonarQube Analysis') {
             steps {
@@ -51,6 +41,39 @@ pipeline {
                 }
             }
             }
+             stage("quality gate"){
+            steps {
+                script {
+                  waitForQualityGate abortPipeline: false, credentialsId: 'spring-boot-postapp' 
+                }
+           }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building'
+              //  sh 'mvn clean package'
+            }
+        }
+        stage('Push image') {
+            steps {
+               script {
+            docker.withRegistry('https://index.docker.io/v1/', 'docker-cred') {
+                   echo 'Push image'
+                // Build and tag Docker image
+               // docker.build(DOCKER_IMAGE)
+                // Push the Docker image
+             //   docker.image(DOCKER_IMAGE).push()
+            }
+        }
+            }
+        }
+        stage("TRIVY"){
+            steps{
+                sh "trivy image trk90/postapp:lastet > trivy.txt"
+            }
+        }
+
+
         stage('Deploy PostgreSQL') {
             steps {
                 script {
