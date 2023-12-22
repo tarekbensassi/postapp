@@ -52,3 +52,10 @@ Deploys Persistent Volumes (PV) and Persistent Volume Claims (PVC) for PostgreSQ
 Refer to the comments in the Jenkinsfile and the individual configuration files for Kubernetes deployments for additional details and explanations.
 
 Feel free to adjust the pipeline according to your specific project requirements and environment.
+
+## Screenshoot s
+
+![k8s CRUD Test](https://github.com/tarekbensassi/postapp/raw/master/screen/k8s-crudtest.png)
+![k8s Jenkinscreen.png](https://github.com/tarekbensassi/postapp/raw/master/screen/k8s-jenkinscreen.png)
+![k8s Pods](https://github.com/tarekbensassi/postapp/raw/master/screen/k8s-pods.png)
+![k8s Services](https://github.com/tarekbensassi/postapp/raw/master/screen/k8s-services.png)
