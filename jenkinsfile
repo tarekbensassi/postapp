@@ -48,12 +48,8 @@ pipeline {
              stage("quality gate"){
                 steps {
                     script {
-                    def scannerHome = tool 'SonarQubeScanner5.0.1'
-                    withSonarQubeEnv('sonarserver') {
-                      echo 'Deploy SonarQube'
-                       sh "${scannerHome}/bin/sonar-scanner"
-                  waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
-                        }
+                        
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
                     }
             }
             }
