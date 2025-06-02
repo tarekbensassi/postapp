@@ -52,7 +52,7 @@ public class PostController {
 	@GetMapping("/posts/{id}")
 	public ResponseEntity<Post> getPostById(@PathVariable("id") long id) {
 		Post PostData = postRepository.findById(id).get();
-
+  
 		if (PostData!=null) {
 			return new ResponseEntity<>(PostData, HttpStatus.OK);
 		} else {
