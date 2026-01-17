@@ -93,11 +93,11 @@ pipeline {
                 sh "trivy image trk90/postapp:lastet > trivy.txt"
             }
         }
-    stage('Docker Image Scan') {
+    //*stage('Docker Image Scan') {
              steps {
                  sh "trivy image --format table -o trivy-image-report.html trk90/postapp:latest "
              }
-         }
+         }*/
 
         stage('Deploy PostgreSQL') {
             steps {
